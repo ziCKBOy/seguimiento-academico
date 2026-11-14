@@ -2,24 +2,24 @@ from modelos import Registro
 
 ###################################################################################
 #DEFINICIONES
-# Arreglo lineal: cada índice i identifica al estudiante de la fila i de la matriz.
-ids = ["A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"]
+# Lista de estudiantes: cada entero es el identificador de una fila de la matriz.
+ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-# Matriz bidimensional: filas = estudiantes (mismo orden que ids),
-# columnas = actividades (mismo orden que obtener_actividades(curso)).
+# Matriz bidimensional indexada por identificador: matriz[id] -> fila del estudiante.
+# Cada fila: una celda por actividad (mismo orden que obtener_actividades(curso)).
 # Cada celda: (puntaje obtenido, True si fue entregada / False si no).
-matriz = [
-    [(10, True),  (15, True),  (20, True),  (0, False),  (0, False)],  # A01
-    [(20, True),  (25, True),  (10, True),  (0, False),  (0, False)],  # A02
-    [(30, True),  (30, True),  (20, True),  (0, False),  (0, False)],  # A03
-    [(20, True),  (20, True),  (20, True),  (20, True),  (10, True)],  # A04
-    [(15, True),  (10, True),  (0, False),  (0, False),  (0, False)],  # A05 - 2 entregas
-    [(25, True),  (30, True),  (25, True),  (20, True),  (15, True)],  # A06
-    [(10, True),  (0, False),  (15, True),  (0, False),  (0, False)],  # A07
-    [(30, True),  (25, True),  (30, True),  (25, True),  (0, False)],  # A08
-    [(5,  True),  (10, True),  (0, False),  (0, False),  (0, False)],  # A09
-    [(20, True),  (20, True),  (20, True),  (15, True),  (10, True)],  # A10
-]
+matriz = {
+    1:  [(10, True),  (15, True),  (20, True),  (0, False),  (0, False)],
+    2:  [(20, True),  (25, True),  (10, True),  (0, False),  (0, False)],
+    3:  [(30, True),  (30, True),  (20, True),  (0, False),  (0, False)],
+    4:  [(20, True),  (20, True),  (20, True),  (20, True),  (10, True)],
+    5:  [(15, True),  (10, True),  (0, False),  (0, False),  (0, False)],  # 2 entregas
+    6:  [(25, True),  (30, True),  (25, True),  (20, True),  (15, True)],
+    7:  [(10, True),  (0, False),  (15, True),  (0, False),  (0, False)],
+    8:  [(30, True),  (25, True),  (30, True),  (25, True),  (0, False)],
+    9:  [(5,  True),  (10, True),  (0, False),  (0, False),  (0, False)],
+    10: [(20, True),  (20, True),  (20, True),  (15, True),  (10, True)],
+}
 
 # Jerarquía simple (árbol): Curso -> Módulos -> Actividades (hojas).
 curso = {
@@ -42,17 +42,18 @@ def obtener_actividades(arbol):
 
 
 def consolidar(lista_ids, tabla):
-    """Convierte la matriz en una lista de Registro con puntaje total y entregas por estudiante."""
+    """Por cada id de la lista busca su fila en la matriz y arma un Registro con puntaje total y entregas."""
     lista_est = []
-    for i in range(len(tabla)):
+    for id_est in lista_ids:
+        fila = tabla[id_est]
         puntaje = 0
         entregadas = 0
-        for j in range(len(tabla[i])):
-            pts, entregada = tabla[i][j]
+        for j in range(len(fila)):
+            pts, entregada = fila[j]
             puntaje += pts
             if entregada:
                 entregadas += 1
-        lista_est.append(Registro(lista_ids[i], entregadas, puntaje))
+        lista_est.append(Registro(id_est, entregadas, puntaje))
     return lista_est
 
 

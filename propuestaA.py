@@ -2,7 +2,8 @@
 #   1.er recorrido: estudiantes con puntaje < 60
 #   2.º recorrido:  estudiantes con entregas < 70 %
 #   3.er procesamiento: estudiantes que aparecen en ambos grupos
-# Cada recorrido marca a los estudiantes en un arreglo paralelo (índice i = estudiante i),
+# Cada recorrido marca a los estudiantes en un arreglo de marcas paralelo a la lista de
+# Registro (posición i = i-ésimo Registro; su identidad la da Registro.id, clave de la matriz),
 # de modo que el tercer procesamiento es otra pasada de n elementos, sin búsquedas anidadas.
 # Usa los mismos datos y funciones de apoyo de propuestaB.py.
 from propuestaB import ids, matriz, curso, obtener_actividades, consolidar
