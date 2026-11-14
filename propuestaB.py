@@ -3,7 +3,7 @@ from modelos import Registro
 ###################################################################################
 #DEFINICIONES
 # Arreglo lineal: cada índice i identifica al estudiante de la fila i de la matriz.
-ids = ["A01", "A02", "A03", "A04"]
+ids = ["A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"]
 
 # Matriz bidimensional: filas = estudiantes (mismo orden que ids),
 # columnas = actividades (mismo orden que obtener_actividades(curso)).
@@ -13,6 +13,12 @@ matriz = [
     [(20, True),  (25, True),  (10, True),  (0, False),  (0, False)],  # A02
     [(30, True),  (30, True),  (20, True),  (0, False),  (0, False)],  # A03
     [(20, True),  (20, True),  (20, True),  (20, True),  (10, True)],  # A04
+    [(15, True),  (10, True),  (0, False),  (0, False),  (0, False)],  # A05 - 2 entregas
+    [(25, True),  (30, True),  (25, True),  (20, True),  (15, True)],  # A06
+    [(10, True),  (0, False),  (15, True),  (0, False),  (0, False)],  # A07
+    [(30, True),  (25, True),  (30, True),  (25, True),  (0, False)],  # A08
+    [(5,  True),  (10, True),  (0, False),  (0, False),  (0, False)],  # A09
+    [(20, True),  (20, True),  (20, True),  (15, True),  (10, True)],  # A10
 ]
 
 # Jerarquía simple (árbol): Curso -> Módulos -> Actividades (hojas).
@@ -50,33 +56,27 @@ def consolidar(lista_ids, tabla):
     return lista_est
 
 
-# 5. Procesamiento de información (Algoritmo base)
-def analizar_rendimiento(estudiantes, id_busc):
-    """Busca un ID e imprime alertas y el total de estudiantes con puntaje < 60."""
+# Propuesta B (modelo definitivo): un solo recorrido de todos los estudiantes que cuenta
+# y muestra a los de puntaje < 60 y deriva a seguimiento a los que además tienen
+# entregas < 70 %.
+def analizar_estudiantes(estudiantes, total_act):
+    """Recorre todos los estudiantes una sola vez: alerta puntaje < 60 y deriva si entregas < 70 %."""
     cant_riesgo = 0
-
-    for est in estudiantes:
-        if est.id == id_busc:
-            print("Registro encontrado: ", est.id)
-
-        if est.ptje < 60:
-            cant_riesgo = cant_riesgo + 1
-            print("Alerta de rendimiento. ID: ", est.id)
-
-    print("Estudiantes con puntaje < 60: ", cant_riesgo)
-
-
-# 6. Resolución de nuevos requerimientos
-def detectar_seguimiento(estudiantes, total_act):
-    """Retorna los IDs con puntaje < 60 y entregas < 70 % para derivar a seguimiento."""
     lista_seg = []
 
     for est in estudiantes:
         pct_ent = (est.entregadas / total_act) * 100
 
-        if (est.ptje < 60) and (pct_ent < 70.0):
-            lista_seg.append(est.id)
-            print("Estudiante derivado: ", est.id)
+        if est.ptje < 60:
+            cant_riesgo = cant_riesgo + 1
+            print(f"  [ALERTA]   {est.id} | puntaje: {est.ptje:>3} | entregas: {pct_ent:.0f}%")
+
+            if pct_ent < 70.0:
+                lista_seg.append(est.id)
+                print(f"  [DERIVADO] {est.id} -> seguimiento")
+
+    print(f"\n  Total de estudiantes con puntaje < 60: {cant_riesgo}")
+    print(f"  Total derivados a seguimiento: {len(lista_seg)}")
 
     return lista_seg
 
@@ -86,5 +86,7 @@ if __name__ == "__main__":
     total_act = len(actividades)
     estudiantes = consolidar(ids, matriz)
 
-    analizar_rendimiento(estudiantes, "A02")
-    lista_seg = detectar_seguimiento(estudiantes, total_act)
+    print("=" * 50)
+    print(" ANÁLISIS DE RENDIMIENTO Y SEGUIMIENTO")
+    print("=" * 50)
+    seguimiento = analizar_estudiantes(estudiantes, total_act)
