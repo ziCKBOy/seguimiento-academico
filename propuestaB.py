@@ -13,7 +13,7 @@ matriz = {
     2:  [(20, True),  (25, True),  (10, True),  (0, False),  (0, False)],
     3:  [(30, True),  (30, True),  (20, True),  (0, False),  (0, False)],
     4:  [(20, True),  (20, True),  (20, True),  (20, True),  (10, True)],
-    5:  [(15, True),  (10, True),  (0, False),  (0, False),  (0, False)],  # 2 entregas
+    5:  [(15, True),  (10, True),  (0, False),  (0, False),  (0, False)],
     6:  [(25, True),  (30, True),  (25, True),  (20, True),  (15, True)],
     7:  [(10, True),  (0, False),  (15, True),  (0, False),  (0, False)],
     8:  [(30, True),  (25, True),  (30, True),  (25, True),  (0, False)],
@@ -48,8 +48,7 @@ def consolidar(lista_ids, tabla):
         fila = tabla[id_est]
         puntaje = 0
         entregadas = 0
-        for j in range(len(fila)):
-            pts, entregada = fila[j]
+        for pts, entregada in fila:
             puntaje += pts
             if entregada:
                 entregadas += 1

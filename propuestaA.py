@@ -13,8 +13,8 @@ def grupo_puntaje(estudiantes):
     """1.er recorrido: marca a los estudiantes con puntaje < 60."""
     marcas = [False] * len(estudiantes)
 
-    for i in range(len(estudiantes)):
-        if estudiantes[i].ptje < 60:
+    for i, est in enumerate(estudiantes):
+        if est.ptje < 60:
             marcas[i] = True
 
     return marcas
@@ -24,8 +24,8 @@ def grupo_entregas(estudiantes, total_act):
     """2.º recorrido: marca a los estudiantes con entregas < 70 %."""
     marcas = [False] * len(estudiantes)
 
-    for i in range(len(estudiantes)):
-        pct_ent = (estudiantes[i].entregadas / total_act) * 100
+    for i, est in enumerate(estudiantes):
+        pct_ent = (est.entregadas / total_act) * 100
         if pct_ent < 70.0:
             marcas[i] = True
 
@@ -36,10 +36,10 @@ def interseccion(estudiantes, marcas_puntaje, marcas_entregas):
     """3.er procesamiento: retorna los IDs que están en ambos grupos."""
     lista_seg = []
 
-    for i in range(len(estudiantes)):
-        if marcas_puntaje[i] and marcas_entregas[i]:
-            lista_seg.append(estudiantes[i].id)
-            print(f"  [DERIVADO] {estudiantes[i].id} -> seguimiento")
+    for est, en_puntaje, en_entregas in zip(estudiantes, marcas_puntaje, marcas_entregas):
+        if en_puntaje and en_entregas:
+            lista_seg.append(est.id)
+            print(f"  [DERIVADO] {est.id} -> seguimiento")
 
     return lista_seg
 
